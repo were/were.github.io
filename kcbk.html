@@ -1,28 +1,52 @@
 <head>
 <style>
 	div.content {
-		background-color:#bbbbbb;
+		background-color:#cccccc;
 		border-style:outset;
 		width:300px;
-		height:300px;
+		height:350px;
 	}
 	body {
 		position:absolute;
-		left:120px;
+		left:200px;
 		top:30px;
 		background-color:#eeeeee;
-		width:1200px;
+		width:1000px;
 	}
 	p {
 		text-indent:2em;
 	}
 </style>
+<script src="jquery-1.12.min.js"></script>
+<script>
+$(document).ready(
+function() {
+	var tail = '<a href="#content">·<a>';
+	for (var i = 2; i <= 4; ++i) {
+		$("h" + i.toString()).mouseenter(
+			function() {
+				//alert($(this).text().slice(-1));
+				if ($(this).text().slice(-1) != '·') {
+					$(this).html($(this).text() + tail);
+				}
+			}
+		);
+		$("h" + i.toString()).mouseleave(
+			function() {
+				var tmp = $(this).html();
+				$(this).html(tmp.slice(0, tmp.length - tail.length));
+			}
+		);
+	}
+}
+);
+</script>
 <title>艦(k)これ(c)bot(b)改(k)使用教程</title>
 </head>
 <body>
 <h1>艦(k)これ(c)bot(b)改(k)使用教程</h1>
-<h2>目录</h2>
 <div class="content">
+<h2 style="text-align:center"><a name="content">目录</a></h2>
 <ul>
 	<li> <a href="#intro">简介</a></li>
 	<ul>
