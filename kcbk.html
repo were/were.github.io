@@ -3,7 +3,7 @@
 	div.content {
 		background-color:#cccccc;
 		border-style:outset;
-		width:400px;
+		width:250px;
 	}
 	body {
 		position:absolute;
@@ -36,6 +36,16 @@ function() {
 				$(this).html(tmp.slice(0, tmp.length - tail.length));
 			}
 		);
+		$(".content-title").text("目录（点击展开）");
+		$(".content-title").click(function() {
+			if ($(this).text() == "目录（点击展开）") {
+				$(this).text("目录（点击折叠）");
+			} else {
+				$(this).text("目录（点击展开）");
+			}
+			//alert($(this).text());
+			$(".content-content").toggle();
+		});
 	}
 }
 );
@@ -45,7 +55,8 @@ function() {
 <body>
 <h1>艦(k)これ(c)bot(b)改(k)使用教程</h1>
 <div class="content">
-<h2 style="text-align:center"><a name="content">目录</a></h2>
+<div style="text-align:center" class="content-title"> <a name="content"> </a> </div>
+<div class="content-content" style="display:none;">
 <ul>
 	<li> <a href="#intro">简介</a></li>
 	<ul>
@@ -70,6 +81,7 @@ function() {
 		</ul>
 	</ul>
 </ul>
+</div>
 </div>
 <h2> <a name="intro"> 简介</a></h2>
 <h3> <a name="intro-kcbk">kcbk的简介 </a></h3>
