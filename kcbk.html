@@ -18,8 +18,7 @@
 </style>
 <script src="jquery-1.12.min.js"></script>
 <script>
-$(document).ready(
-function() {
+$(document).ready(function() {
 	var tail = '<a href="#content">·<a>';
 	for (var i = 2; i <= 4; ++i) {
 		$("h" + i.toString()).mouseenter(
@@ -36,19 +35,18 @@ function() {
 				$(this).html(tmp.slice(0, tmp.length - tail.length));
 			}
 		);
-		$(".content-title").text("目录（点击展开）");
-		$(".content-title").click(function() {
-			if ($(this).text() == "目录（点击展开）") {
-				$(this).text("目录（点击折叠）");
-			} else {
-				$(this).text("目录（点击展开）");
-			}
-			//alert($(this).text());
-			$(".content-content").toggle();
-		});
 	}
-}
-);
+	$(".content-title").text("目录（点击展开）");
+	$(".content-title").click(function() {
+		if ($(this).text() == "目录（点击展开）") {
+			$(this).text("目录（点击折叠）");
+		} else {
+			$(this).text("目录（点击展开）");
+		}
+		//alert($(this).text());
+		$(".content-content").toggle();
+	});
+});
 </script>
 <title>艦(k)これ(c)bot(b)改(k)使用教程</title>
 </head>
