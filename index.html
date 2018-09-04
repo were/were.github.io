@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Jian Weng</title>
+		<title id="my-name">Jian Weng</title>
 		<link rel="stylesheet" type="text/css" media="screen" href="css/normalize.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/main.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/site.css"> 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	</head>
 	<body>
 		<div id="self">
@@ -14,7 +15,7 @@
 				<div> 2nd year Ph.D student</div>
 				<div> <a href="https://www.cs.ucla.edu/">Computer Science Department</a></div>
 				<div> <a href="https://samueli.ucla.edu/">Henry Samueli School of Engineering</a></div>
-				<div> [first name].[last name] -at- ucla.edu </a></div>
+				<div title="Click to get the actual email address." id="email"> <a href="#"> [first name].[last name] -at- ucla.edu </a></div>
 				<div> 404 Westwood Plaza EVI #470, Los Angeles, CA 90024 </div>
 			</div>
 		</div>
@@ -25,7 +26,7 @@
 			as well as developing compilers for these accelerators.
 		</p>
 		<p>
-			Prior to joining UCLA, I worked as research intern at Prof. <a href="http://www.csl.cornell.edu/~zhiruz/">Zhiru Zhang</a>'s
+			Prior to joining UCLA, I worked as a research intern at Prof. <a href="http://www.csl.cornell.edu/~zhiruz/">Zhiru Zhang</a>'s
 			group for one year, which was the last year of my undergraduate. I got my B.E. degree from ACM Honored Class,
 			Shanghai Jiao Tong University.
 		</p>
@@ -47,5 +48,13 @@
 		<div id="elsewhere" style="margin-top: 2em; text-align: center;">
 			<span class="github"><img src="imag/github-64px.png" width="16px" height="16px" style="vertical-align: middle;" /> <a href="https://github.com/were" rel="me">@were</a></span>
 		</div>
+		<script>
+			$('#email').click(function() {
+				var prefix = $('#my-name').text().toLowerCase().replace(' ', '.');
+				var suffix = $('#email').text().split(' -at- ')[1];
+				$('#email').text(prefix + String.fromCharCode(64) + suffix);
+				$('#email').off("click");
+			});
+		</script>
 	</body>
 <html>
