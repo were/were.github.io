@@ -104,8 +104,8 @@
 			$('#email').click(function() {
 				var prefix = $('#my-name').text().toLowerCase().replace(' ', '.');
 				var suffix = $('#email').text().split(' -at- ')[1];
-				$('#email').text(prefix + String.fromCharCode(64) + suffix);
-				$('#email').off("click");
+				(prefix + String.fromCharCode(64) + suffix).execCommand("copy");
+                                alert("My email is copied to your clipboard!");
 			});
 		</script>
 	</body>
