@@ -22,8 +22,7 @@
 		<h2>Bio </h2>
 		<p>
 			I am a 3rd year Ph.D student under the guidance of <a href="http://web.cs.ucla.edu/~tjn/">Prof. Tony Nowatzki</a>. 
-			My research interests mainly lie on designing and analyzing heterogeneous reconfigurable accelerators
-			as well as developing compilers for these accelerators.
+			My research interests mainly lie on designing and analyzing spatial architectures as well as the assosiated compilation techniques.
 		</p>
 		<p>
 			Prior to joining UCLA, I worked as a research intern at <a href="http://www.csl.cornell.edu/~zhiruz/">Prof. Zhiru Zhang</a>'s
@@ -31,6 +30,26 @@
 			Shanghai Jiao Tong University.
 		</p>
 		<h2>Publication</h2>
+
+		<div id="publication">
+		<div class="thumb"> &nbsp; </div>
+		<div class="title">
+                  <a href="#"> DSAGEN: Synthesizing Programmable Spatial Architectures (to appear) </a>
+                </div>
+		<div class="misc">
+                  <a href="#">[slides]</a>
+                </div>
+		<div class="authors">
+			<b> Jian Weng </b>
+			<a href="https://sihaoliu.github.io/"> Sihao Liu </a>
+			<a href="https://in.linkedin.com/in/vidushi-dadu-b8507b9b"> Vidushi Dadu </a>
+                        <a href="http://seanzw.github.io/"> Zhengrong Wang </a>
+			<a href="http://web.cs.ucla.edu/~tjn"> Tony Nowatzki </a>
+		</div>
+		<div class="venue">
+			<em>International Symposium on Computer Architecture (ISCA'20)</em> 77 / 421
+		</div>
+		</div>
 
 		<div id="publication">
 		<div class="thumb"> &nbsp; </div>
@@ -104,10 +123,11 @@
 		</div>
 		<script>
 			$('#email').click(function() {
-				var prefix = $('#my-name').text().toLowerCase().replace(' ', '.');
-				var suffix = $('#email').text().split(' -at- ')[1];
-				(prefix + String.fromCharCode(64) + suffix).execCommand("copy");
-                                alert("My email is copied to your clipboard!");
+				var prefix = $.trim($('#my-name').text().toLowerCase().replace(' ', '.'));
+				var suffix = $.trim($('#email').text().split(' -at- ')[1]);
+				var txt = $.trim((prefix + String.fromCharCode(64) + suffix));
+                                $(this).text(txt);
+                                $(this).off('click');
 			});
 		</script>
 	</body>
