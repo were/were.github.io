@@ -11,8 +11,8 @@ These external links are involved, you can open them in your browser tabs in adv
 ## Instruction Format
 
 All the RISCV instructions are 32-bit vectors.
-Please refer page 130 (# on the upper right of each page, not PDF reader page) of
-[this file](https://riscv.org/wp-content/uploads/2019/12/riscv-spec-20191213.pdf)
+Please refer page 130 (# on the upper right of each page, not PDF reader page) of the
+[RISC-V manual](https://riscv.org/wp-content/uploads/2019/12/riscv-spec-20191213.pdf)
 for the format of these vectors.
 
 To choose a proper format for your extended instruction, the number of src/dst
@@ -40,7 +40,7 @@ addi    rd rs1 imm12           14..12=7 6..2=0x04 1..0=3
 the first two bits are always `11`.
 
 For more information on the operand tokens appear in this file, refer to
-(this)[https://github.com/riscv/riscv-opcodes/blob/03be826f17faedcaee7f60223f402850e254df0a/parse_opcodes#L17-L49]
+[this](https://github.com/riscv/riscv-opcodes/blob/03be826f17faedcaee7f60223f402850e254df0a/parse_opcodes#L17-L49)
 for more details. This Python dict declares the bit range this token occupies.
 The semantics of each token id can be understood by knowing their bit range,
 acompanied with the figure of the instruction format.
@@ -70,7 +70,37 @@ use U-type format.
 
 ## Assembler Integration
 
-TBD: About the code segments to be integrated; about the delta patcher.
+After designing how instructions look like in your mind, we need to integrate them to the compiler, both the
+**binary encoding** and the **text mnemonic**. This is done by hacking the subrepo,
+`riscv-gnu-toolchain/riscv-binutils`.
+
+### Binary Encoding
+
+To integrate the binary encoding of the extended instruction, we want to replace the code segments
+([1](https://github.com/riscv/riscv-binutils-gdb/blob/2cb5c79dad39dd438fb0f7372ac04cf5aa2a7db7/include/opcode/riscv-opc.h#L550-L597),
+[2](https://github.com/riscv/riscv-binutils-gdb/blob/2cb5c79dad39dd438fb0f7372ac04cf5aa2a7db7/include/opcode/riscv-opc.h#L1106-L1129))
+related to customized opcodes by the extended encoding.
+
+In [risc-v opcodes](https://github.com/riscv/riscv-opcodes), scripts are provided to generate these encoding
+codes. Use the following command:
+
+```bash
+cat opcodes-custom | ./parse-opcode -c > snippet
+```
+
+Edit `opcodes-custom` to name the extended instructions, and define the operands.
+
+Not every line of `snippet` is useful, open the file and find the corresponding lines.
+
+Copy those lines and use them to replace the code segments mentioned above.
+
+### Mnemonic Format
+
+To integrate the mnemonic (text) format of the extended instruction, we want to add additional rules below
+[this line](https://github.com/riscv/riscv-binutils-gdb/blob/2cb5c79dad39dd438fb0f7372ac04cf5aa2a7db7/opcodes/riscv-opc.c#L199).
+
+
+### Implementation
 
 ## Intrinsic Wrapper
 

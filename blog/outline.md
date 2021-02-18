@@ -1,21 +1,26 @@
 # Being a Full-Stack Hacker: From ISA to Silicon
 
-I am writing these blogs for Ph.D. students in software/hardware co-design area
-to save some time of hacking the research infrastructures. Instead of learning
-to the structure of each codebase from scratch, these blogs cover:
-1. hints on finding the files you want to look at and modify to extend your functionality;
+The knowledge of hacking the full-stack software/hardware infrastructure
+is very fragmented, which are either some questions on Stack Overflow or
+learnt from senior colleagues orally. At worst, maybe reading the codebase
+is necessary. I am writing these blogs for to save some of your time (hopefully)
+to gather these fragments in a "whole body". These blog chapters cover:
+1. hints on finding the files you potentially want to look at and modify to
+   extend the functionality;
 2. engineering tricks to improve the experience of development;
 3. experiences to avoid the pitfalls in the existing codebase;
-4. undocumented details to make you better understand how the origin project works.
+4. undocumented details to make you better understand how the origin
+   project works.
 
 To examplify the extension, these blogs will use my research infrasture,
 [DSAGEN](https://github.com/polyarch/dsa-framework), as an paradigm of hacking.
-Though my goal of research may not exactly yours (readers), I still believe
-these experiences are useful and can be easily transfered.
+Though my project is used for explanation, I will try to be as goal-neutral
+as possible, so that these experiences can be reused.
 
 ## Contents
 
-These blogs is stuck to the [RISC-V ISA](https://riscv.org/).
+These blogs is stuck to the [RISC-V ISA](https://riscv.org/). If after finishing
+this I find these blogs interesting, there will be x86 version too.
 
 * RISCV ISA
   * [Extending the ISA](./isa.md)
@@ -31,4 +36,3 @@ These blogs is stuck to the [RISC-V ISA](https://riscv.org/).
   * TBD
 * Chipyard
   * TBD
-

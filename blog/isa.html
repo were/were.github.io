@@ -35,8 +35,8 @@ the basic sense and implementation of extending the RISC-V ISA are covered.</p>
 </ul>
 <h2 id="instruction-format">Instruction Format</h2>
 <p>All the RISCV instructions are 32-bit vectors.
-Please refer page 130 (# on the upper right of each page, not PDF reader page) of
-<a href="https://riscv.org/wp-content/uploads/2019/12/riscv-spec-20191213.pdf">this file</a>
+Please refer page 130 (# on the upper right of each page, not PDF reader page) of the
+<a href="https://riscv.org/wp-content/uploads/2019/12/riscv-spec-20191213.pdf">RISC-V manual</a>
 for the format of these vectors.</p>
 <p>To choose a proper format for your extended instruction, the number of src/dst
 operands, the type of operands (imm/reg), and the number of bits to be encoded
@@ -58,7 +58,7 @@ Both the figure and the text description are little endian format.</p>
 <code>6..2</code> describes the opcode. According to Table 24.1 on page 129 (no page number on the PDF),
 the first two bits are always <code>11</code>.</p>
 <p>For more information on the operand tokens appear in this file, refer to
-(this)[<a href="https://github.com/riscv/riscv-opcodes/blob/03be826f17faedcaee7f60223f402850e254df0a/parse_opcodes#L17-L49">https://github.com/riscv/riscv-opcodes/blob/03be826f17faedcaee7f60223f402850e254df0a/parse_opcodes#L17-L49</a>]
+<a href="https://github.com/riscv/riscv-opcodes/blob/03be826f17faedcaee7f60223f402850e254df0a/parse_opcodes#L17-L49">this</a>
 for more details. This Python dict declares the bit range this token occupies.
 The semantics of each token id can be understood by knowing their bit range,
 acompanied with the figure of the instruction format.</p>
@@ -84,7 +84,23 @@ You <strong>cannot</strong> give <code>funct3</code> random values. The meanings
 <code>1</code> and <code>5</code> cannot be <code>funct3</code>. Also, as mentioned above, if we want to use <code>0</code> as <code>funct3</code>, we cannot
 use U-type format.</p>
 <h2 id="assembler-integration">Assembler Integration</h2>
-<p>TBD: About the code segments to be integrated; about the delta patcher.</p>
+<p>After designing how instructions look like in your mind, we need to integrate them to the compiler, both the
+<strong>binary encoding</strong> and the <strong>text mnemonic</strong>. This is done by hacking the subrepo,
+<code>riscv-gnu-toolchain/riscv-binutils</code>.</p>
+<h3 id="binary-encoding">Binary Encoding</h3>
+<p>To integrate the binary encoding of the extended instruction, we want to replace the code segments
+(<a href="https://github.com/riscv/riscv-binutils-gdb/blob/2cb5c79dad39dd438fb0f7372ac04cf5aa2a7db7/include/opcode/riscv-opc.h#L550-L597">1</a>,
+<a href="https://github.com/riscv/riscv-binutils-gdb/blob/2cb5c79dad39dd438fb0f7372ac04cf5aa2a7db7/include/opcode/riscv-opc.h#L1106-L1129">2</a>)
+related to customized opcodes by the extended encoding.</p>
+<p>In <a href="https://github.com/riscv/riscv-opcodes">risc-v opcodes</a>, scripts are provided to generate these encoding
+codes. Use the following command:</p>
+<pre><code class="language-bash"><div>cat opcodes-custom | ./parse-opcode -c &gt; snippet
+</div></code></pre>
+<p>Edit <code>opcodes-custom</code> to name the extended instructions, and define the operands.</p>
+<p>Not every line of <code>snippet</code> is useful, open the file and find the corresponding lines.</p>
+<p>Copy those lines and use them to replace the code segments mentioned above.</p>
+<h3 id="mnemonic-format">Mnemonic Format</h3>
+<h3 id="implementation">Implementation</h3>
 <h2 id="intrinsic-wrapper">Intrinsic Wrapper</h2>
 <p>TBD: About inline assembly code and make a forward link to the unified interface.</p>
 
