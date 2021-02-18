@@ -97,11 +97,40 @@ Copy those lines and use them to replace the code segments mentioned above.
 ### Mnemonic Format
 
 To integrate the mnemonic (text) format of the extended instruction, we want to add additional rules below
-[this line](https://github.com/riscv/riscv-binutils-gdb/blob/2cb5c79dad39dd438fb0f7372ac04cf5aa2a7db7/opcodes/riscv-opc.c#L199).
-
+[this line](https://github.com/riscv/riscv-binutils-gdb/blob/2cb5c79dad39dd438fb0f7372ac04cf5aa2a7db7/opcodes/riscv-opc.c#L199). The meaning of each column is:
+* Name string;
+* The default data width; zero means the same as machine bits; here I suggest to give 0;
+* The module of the instruction belongs to; here I suggest just give "I", the most basic module;
+* The operand description; there is no document for the meaning of each letter, but you can refer to
+  [this git issue](https://github.com/riscv/riscv-binutils-gdb/issues/243) and read the source code for more 
+  details; typically, knowing `s`, `t`, `j`, `d`, and `q` are enough;
+* For instructions without aliasing and pesudo representation, the next two columns can just give the `MASK_*` 
+  and `MATCH_*` generated in `snippet`.
+* I believe it should be something about the aliasing and pseudo thing too, and giving `0` should also suffice.
 
 ### Implementation
+
+This section includes some design descision I made. Though subjective, I hope this may more or less help your
+development experience. I adopt an [auto-patcher](https://github.com/PolyArch/dsa-riscv-ext/) in my project.
+This patcher should be in the same folder as `riscv-gnu-toolchain`. Say you have a directory `stack/`[^1], then
+both `riscv-gnu-toolchain` and `patcher` should be in `stack/`.
+I made this design decision for the following reason:
+1. I want to minimize the invasion to the gnu toolchain so that the cost of rebasing gnu toolchain
+   can also be minimized;
+2. `opcode-custom` and `riscv-opc.c` should be updated together to comply to the same format of the extended
+   instructions, so it is highly desirable to have a unified programming interface to generate and integrate
+   both. For further development, this interface can also be used to generate ISA extension to LLVM toolchain.
+3. Last but not the least, it involves many manual "select, copy, and paste" stuff, which is error-prone and
+   breaks the automaticity of the compilation flow of the infrastructure stack.
+
+Refer to [isa.ext](https://github.com/PolyArch/dsa-riscv-ext/blob/master/isa.ext), I have a text format to
+describe how the extended instructions look like. Then refer to the
+[Makefile](https://github.com/PolyArch/dsa-riscv-ext/blob/master/Makefile) and
+[auto-patch.py](https://github.com/PolyArch/dsa-riscv-ext/blob/master/auto-patch.py)
+for how the involved files are modified to integrate the extended instructions.
 
 ## Intrinsic Wrapper
 
 TBD: About inline assembly code and make a forward link to the unified interface.
+
+[^1]: For the structure of the `stack` directory, refer to [this repo](https://github.com/polyarch/dsa-framework);

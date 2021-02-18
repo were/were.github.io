@@ -101,10 +101,47 @@ codes. Use the following command:</p>
 <p>Copy those lines and use them to replace the code segments mentioned above.</p>
 <h3 id="mnemonic-format">Mnemonic Format</h3>
 <p>To integrate the mnemonic (text) format of the extended instruction, we want to add additional rules below
-<a href="https://github.com/riscv/riscv-binutils-gdb/blob/2cb5c79dad39dd438fb0f7372ac04cf5aa2a7db7/opcodes/riscv-opc.c#L199">this line</a>.</p>
+<a href="https://github.com/riscv/riscv-binutils-gdb/blob/2cb5c79dad39dd438fb0f7372ac04cf5aa2a7db7/opcodes/riscv-opc.c#L199">this line</a>. The meaning of each column is:</p>
+<ul>
+<li>Name string;</li>
+<li>The default data width; zero means the same as machine bits; here I suggest to give 0;</li>
+<li>The module of the instruction belongs to; here I suggest just give &quot;I&quot;, the most basic module;</li>
+<li>The operand description; there is no document for the meaning of each letter, but you can refer to
+<a href="https://github.com/riscv/riscv-binutils-gdb/issues/243">this git issue</a> and read the source code for more
+details; typically, knowing <code>s</code>, <code>t</code>, <code>j</code>, <code>d</code>, and <code>q</code> are enough;</li>
+<li>For instructions without aliasing and pesudo representation, the next two columns can just give the <code>MASK_*</code>
+and <code>MATCH_*</code> generated in <code>snippet</code>.</li>
+<li>I believe it should be something about the aliasing and pseudo thing too, and giving <code>0</code> should also suffice.</li>
+</ul>
 <h3 id="implementation">Implementation</h3>
+<p>This section includes some design descision I made. Though subjective, I hope this may more or less help your
+development experience. I adopt an <a href="https://github.com/PolyArch/dsa-riscv-ext/">auto-patcher</a> in my project.
+This patcher should be in the same folder as <code>riscv-gnu-toolchain</code>. Say you have a directory <code>stack/</code><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>, then
+both <code>riscv-gnu-toolchain</code> and <code>patcher</code> should be in <code>stack/</code>.
+I made this design decision for the following reason:</p>
+<ol>
+<li>I want to minimize the invasion to the gnu toolchain so that the cost of rebasing gnu toolchain
+can also be minimized;</li>
+<li><code>opcode-custom</code> and <code>riscv-opc.c</code> should be updated together to comply to the same format of the extended
+instructions, so it is highly desirable to have a unified programming interface to generate and integrate
+both. For further development, this interface can also be used to generate ISA extension to LLVM toolchain.</li>
+<li>Last but not the least, it involves many manual &quot;select, copy, and paste&quot; stuff, which is error-prone and
+breaks the automaticity of the compilation flow of the infrastructure stack.</li>
+</ol>
+<p>Refer to <a href="https://github.com/PolyArch/dsa-riscv-ext/blob/master/isa.ext">isa.ext</a>, I have a text format to
+describe how the extended instructions look like. Then refer to the
+<a href="https://github.com/PolyArch/dsa-riscv-ext/blob/master/Makefile">Makefile</a> and
+<a href="https://github.com/PolyArch/dsa-riscv-ext/blob/master/auto-patch.py">auto-patch.py</a>
+for how the involved files are modified to integrate the extended instructions.</p>
 <h2 id="intrinsic-wrapper">Intrinsic Wrapper</h2>
 <p>TBD: About inline assembly code and make a forward link to the unified interface.</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>For the structure of the <code>stack</code> directory, refer to <a href="https://github.com/polyarch/dsa-framework">this repo</a>; <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 
     </body>
     </html>

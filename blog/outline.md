@@ -17,6 +17,11 @@ To examplify the extension, these blogs will use my research infrasture,
 Though my project is used for explanation, I will try to be as goal-neutral
 as possible, so that these experiences can be reused.
 
+**Note:** Unlike a paper publication, which takes infinte iterations to edit,
+to avoid careless mistakes and polish language, these blogs inevitably have some
+flaw. If you have any suggestions, do not hesitate to contact and suggest me for
+updates.
+
 ## Contents
 
 These blogs is stuck to the [RISC-V ISA](https://riscv.org/). If after finishing
