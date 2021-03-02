@@ -129,8 +129,4 @@ describe how the extended instructions look like. Then refer to the
 [auto-patch.py](https://github.com/PolyArch/dsa-riscv-ext/blob/master/auto-patch.py)
 for how the involved files are modified to integrate the extended instructions.
 
-## Intrinsic Wrapper
-
-TBD: About inline assembly code and make a forward link to the unified interface.
-
 [^1]: For the structure of the `stack` directory, refer to [this repo](https://github.com/polyarch/dsa-framework);

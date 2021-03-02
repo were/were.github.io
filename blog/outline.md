@@ -29,6 +29,7 @@ this I find these blogs interesting, there will be x86 version too.
 
 * RISCV ISA
   * [Extending the ISA](./isa.md)
+  * [Programming in Intrinsics](./intrin.md)
 * Gem5 Simulator
   * Decoder DSL
   * Execution Context
