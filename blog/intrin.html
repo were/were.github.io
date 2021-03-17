@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Programming in Intrinsics</title>
+        <style>
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="programming-in-intrinsics">Programming in Intrinsics</h1>
+<p>For now, we have the extended instructions integrated to the compiler infrastructure.
+However, the high-level abstraction is still absent. For a quick proof of concept, manually
+writing assembly code is probably a good short-term solution.</p>
+<h2 id="hardware-intrinsics">Hardware Intrinsics</h2>
+<p>Hardware Intrinsics are essentially function wrappers of the inlined assembly code.
+The format of an inlined assembly code should look like:</p>
+<pre><code><code><div>__asm__ __volatile__(&quot;mnemonic &quot; &quot;%0, %1, %2&quot; : &quot;=r&quot;(a) : &quot;r&quot;(b), &quot;i&quot;(c) )
+</div></code></code></pre>
+<p>where:</p>
+<ol>
+<li>The <code>&quot;mnemonic&quot;</code> is the name of the instruction;</li>
+<li><code>&quot;%0, %1, %2&quot;</code> is something like C-like printf/scanf, which describes the format of the arguments;</li>
+<li>The strings (<code>&quot;=r&quot;</code>, <code>&quot;r&quot;</code> and <code>&quot;i&quot;</code>) affilicated with expressions (<code>a</code>, <code>b</code> and <code>c</code>) represents
+the values fed to this assembly instruction, where
+<ol>
+<li><code>&quot;=r&quot;</code> indicates the destination register; the expression fed to this register must be a left value;
+this <strong>must</strong> appear between to colons (<code>:</code>).</li>
+<li><code>&quot;r&quot;</code> indicates the source register; for now, I only do <code>i64</code> integers; if a <code>float</code> or <code>double</code> is
+desired, probably we should use <code>reinterpret_cast</code>;</li>
+<li><code>&quot;i&quot;</code> indicates an immediate value (constant); this value is a <strong>signed</strong> integer that matches the number
+of bits we discussed in last chapter.</li>
+</ol>
+</li>
+</ol>
+<p>You can use either macros of inlined function calls to wrap these assembly code. You can refer to
+<a href="https://github.com/PolyArch/dsa-riscv-ext/blob/master/dsaintrin.h">this file</a> for more details.
+Here we adopt inline functions, because inlined functions allow us to setup default values for
+some functions with a long argument list.</p>
+<h2 id="pitfalls-to-avoid">Pitfalls to Avoid</h2>
+
+    </body>
+    </html>
