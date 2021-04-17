@@ -20,7 +20,8 @@ where:
 3. The strings (`"=r"`, `"r"` and `"i"`) affilicated with expressions (`a`, `b` and `c`) represents
    the values fed to this assembly instruction, where
    1. `"=r"` indicates the destination register; the expression fed to this register must be a left value;
-      this **must** appear between to colons (`:`).
+      this **must** appear between to colons (`:`). This is **not** enforced by the compiler, so developers
+      should pay attention.
    2. `"r"` indicates the source register; for now, I only do `i64` integers; if a `float` or `double` is
       desired, probably we should use `reinterpret_cast`;
    3. `"i"` indicates an immediate value (constant); this value is a **signed** integer that matches the number
@@ -33,4 +34,7 @@ Here we adopt inline functions, because inlined functions allow us to setup defa
 some functions with a long argument list.
 
 
-## Pitfalls to Avoid
+## Function-like Wrapper
+
+To make the programming interface slightly more intuitive, developers can use either macros or **inline**
+functions as wrapper. This is especially useful when mulitiple instructions X
