@@ -9,8 +9,8 @@ writing assembly code is probably a good short-term solution.
 Hardware Intrinsics are essentially function wrappers of the inlined assembly code.
 The format of an inlined assembly code should look like:
 
-```
-__asm__ __volatile__("mnemonic " "%0, %1, %2" : "=r"(a) : "r"(b), "i"(c) )
+``` C
+__asm__ __volatile__("mnemonic " "%0, %1, %2" : "=r"(a) : "r"(b), "i"(c))
 ```
 
 where:
@@ -36,5 +36,35 @@ some functions with a long argument list.
 
 ## Function-like Wrapper
 
+``` C
+// +: Macros implicitly inline the code in pp.
+// -: No return value is allowed.
+#define INTRINSIC_MACRO(a, b, c) \
+   do {
+     __asm__ __volatile__("asm1 " "%0, %1, %2" : "=r"(a) :);
+     __asm__ __volatile__("asm2 " "%0, %1, %2" : : "r"(b));
+     __asm__ __volatile__("asm3 " "%0, %1, %2" : : "i"(c));
+   } while (false)
+```
+
+``` C
+// +: Function allows you to use the syntax sugar default values.
+// +: More flexible, either return value or reference can be used.
+// -: Inline should be done by the compiler optimization.
+inline void INTRINSIC_FUNC(int64_t b, int c = 1) {
+   int64_t a;
+   __asm__ __volatile__("asm1 " "%0, %1, %2" : "=r"(a) :);
+   __asm__ __volatile__("asm2 " "%0, %1, %2" : : "r"(b));
+   __asm__ __volatile__("asm3 " "%0, %1, %2" : : "i"(c));
+   return a;
+}
+```
+
+
 To make the programming interface slightly more intuitive, developers can use either macros or **inline**
-functions as wrapper. This is especially useful when mulitiple instructions X
+functions as wrapper. This is especially useful when mulitiple instructions are required to achieve one
+semantic behavior. Macros implicitly inline the "function call", but for a real function call, a specific
+level of optimization should be enabled to inline the function call. This is critical for the semantics
+correctness --- **even if you give a constant to the function call, within the scope of that function, it
+is a declared argument int, which will not be recognized as a constant by the compiler to fill in immediate
+operand for the given assembly instruction.**

@@ -30,8 +30,8 @@ writing assembly code is probably a good short-term solution.</p>
 <h2 id="hardware-intrinsics">Hardware Intrinsics</h2>
 <p>Hardware Intrinsics are essentially function wrappers of the inlined assembly code.
 The format of an inlined assembly code should look like:</p>
-<pre><code><code><div>__asm__ __volatile__(&quot;mnemonic &quot; &quot;%0, %1, %2&quot; : &quot;=r&quot;(a) : &quot;r&quot;(b), &quot;i&quot;(c) )
-</div></code></code></pre>
+<pre><code class="language-C"><div>__asm__ __volatile__(<span class="hljs-string">&quot;mnemonic &quot;</span> <span class="hljs-string">&quot;%0, %1, %2&quot;</span> : <span class="hljs-string">&quot;=r&quot;</span>(a) : <span class="hljs-string">&quot;r&quot;</span>(b), <span class="hljs-string">&quot;i&quot;</span>(c))
+</div></code></pre>
 <p>where:</p>
 <ol>
 <li>The <code>&quot;mnemonic&quot;</code> is the name of the instruction;</li>
@@ -40,11 +40,12 @@ The format of an inlined assembly code should look like:</p>
 the values fed to this assembly instruction, where
 <ol>
 <li><code>&quot;=r&quot;</code> indicates the destination register; the expression fed to this register must be a left value;
-this <strong>must</strong> appear between to colons (<code>:</code>).</li>
+this <strong>must</strong> appear between to colons (<code>:</code>). This is <strong>not</strong> enforced by the compiler, so developers
+should pay attention.</li>
 <li><code>&quot;r&quot;</code> indicates the source register; for now, I only do <code>i64</code> integers; if a <code>float</code> or <code>double</code> is
 desired, probably we should use <code>reinterpret_cast</code>;</li>
 <li><code>&quot;i&quot;</code> indicates an immediate value (constant); this value is a <strong>signed</strong> integer that matches the number
-of bits we discussed in last chapter.</li>
+of bits we discussed in last chapter; this value <strong>must</strong> be a compilation time constant.</li>
 </ol>
 </li>
 </ol>
@@ -52,7 +53,34 @@ of bits we discussed in last chapter.</li>
 <a href="https://github.com/PolyArch/dsa-riscv-ext/blob/master/dsaintrin.h">this file</a> for more details.
 Here we adopt inline functions, because inlined functions allow us to setup default values for
 some functions with a long argument list.</p>
-<h2 id="pitfalls-to-avoid">Pitfalls to Avoid</h2>
+<h2 id="function-like-wrapper">Function-like Wrapper</h2>
+<pre><code class="language-C"><div><span class="hljs-comment">// +: Macros implicitly inline the code in pp.</span>
+<span class="hljs-comment">// -: No return value is allowed.</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> INTRINSIC_MACRO(a, b, c) \
+   do {</span>
+     __asm__ __volatile__(<span class="hljs-string">&quot;asm1 &quot;</span> <span class="hljs-string">&quot;%0, %1, %2&quot;</span> : <span class="hljs-string">&quot;=r&quot;</span>(a) :);
+     __asm__ __volatile__(<span class="hljs-string">&quot;asm2 &quot;</span> <span class="hljs-string">&quot;%0, %1, %2&quot;</span> : : <span class="hljs-string">&quot;r&quot;</span>(b));
+     __asm__ __volatile__(<span class="hljs-string">&quot;asm3 &quot;</span> <span class="hljs-string">&quot;%0, %1, %2&quot;</span> : : <span class="hljs-string">&quot;i&quot;</span>(c));
+   } <span class="hljs-keyword">while</span> (<span class="hljs-literal">false</span>)
+</div></code></pre>
+<pre><code class="language-C"><div><span class="hljs-comment">// +: Function allows you to use the syntax sugar default values.</span>
+<span class="hljs-comment">// +: More flexible, either return value or reference can be used.</span>
+<span class="hljs-comment">// -: Inline should be done by the compiler optimization.</span>
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">INTRINSIC_FUNC</span><span class="hljs-params">(<span class="hljs-keyword">int64_t</span> b, <span class="hljs-keyword">int</span> c = <span class="hljs-number">1</span>)</span> </span>{
+   <span class="hljs-keyword">int64_t</span> a;
+   __asm__ __volatile__(<span class="hljs-string">&quot;asm1 &quot;</span> <span class="hljs-string">&quot;%0, %1, %2&quot;</span> : <span class="hljs-string">&quot;=r&quot;</span>(a) :);
+   __asm__ __volatile__(<span class="hljs-string">&quot;asm2 &quot;</span> <span class="hljs-string">&quot;%0, %1, %2&quot;</span> : : <span class="hljs-string">&quot;r&quot;</span>(b));
+   __asm__ __volatile__(<span class="hljs-string">&quot;asm3 &quot;</span> <span class="hljs-string">&quot;%0, %1, %2&quot;</span> : : <span class="hljs-string">&quot;i&quot;</span>(c));
+   <span class="hljs-keyword">return</span> a;
+}
+</div></code></pre>
+<p>To make the programming interface slightly more intuitive, developers can use either macros or <strong>inline</strong>
+functions as wrapper. This is especially useful when mulitiple instructions are required to achieve one
+semantic behavior. Macros implicitly inline the &quot;function call&quot;, but for a real function call, a specific
+level of optimization should be enabled to inline the function call. This is critical for the semantics
+correctness --- <strong>even if you give a constant to the function call, within the scope of that function, it
+is a declared argument int, which will not be recognized as a constant by the compiler to fill in immediate
+operand for the given assembly instruction.</strong></p>
 
     </body>
     </html>

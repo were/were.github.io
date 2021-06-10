@@ -30,9 +30,8 @@ this I find these blogs interesting, there will be x86 version too.
 * RISCV ISA
   * [Extending the ISA](./isa.md)
   * [Programming in Intrinsics](./intrin.md)
-* Gem5 Simulator
-  * Decoder DSL
-  * Execution Context
+* Simulating the Extended ISA in Gem5
+  * [Decoding and Dispatching the Extended ISA](./decode.md)
   * General-Purpose Pipeline
 * LLVM
   * Extending the ISA
