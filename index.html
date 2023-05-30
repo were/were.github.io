@@ -15,7 +15,8 @@
         <div> 6th-year Ph.D Candidate</div>
         <div> <a href="https://www.cs.ucla.edu/">Computer Science Department</a></div>
         <div> <a href="https://samueli.ucla.edu/">Henry Samueli School of Engineering</a></div>
-        <div title="Click to get my email address." id="email"> <a href="#"> [first name].[last name] -at- ucla.edu </a></div>
+        <div title="Click to get my UCLA email address." id="email"> <a href="#"> [first name].[last name] -at- ucla.edu </a></div>
+        <div title="Click to get my personal email address." id="personal-email"> <a href="#"> [first name].[last name][smtp port] -at- gmail.com </a></div>
         <div> 404 Westwood Plaza EVI #468 <br> Los Angeles, CA 90095 </div>
       </div>
     </div>
@@ -328,6 +329,13 @@
         var prefix = $.trim($('#my-name').text().toLowerCase().replace(' ', '.'));
         var suffix = $.trim($('#email').text().split(' -at- ')[1]);
         var txt = $.trim((prefix + String.fromCharCode(64) + suffix));
+        $(this).text(txt);
+        $(this).off('click');
+      });
+      $('#personal-email').click(function() {
+        var prefix = $.trim($('#my-name').text().toLowerCase().replace(' ', '.'));
+        var suffix = $.trim($('#email').text().split(' -at- ')[1]);
+        var txt = $.trim((prefix + "465" + String.fromCharCode(64) + suffix));
         $(this).text(txt);
         $(this).off('click');
       });
