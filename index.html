@@ -333,7 +333,7 @@
       });
       $('#personal-email').click(function() {
         var prefix = $.trim($('#my-name').text().toLowerCase().replace(' ', '.'));
-        var suffix = $.trim($('#email').text().split(' -at- ')[1]);
+        var suffix = $.trim($('#personal-email').text().split(' -at- ')[1]);
         var txt = $.trim((prefix + "465" + String.fromCharCode(64) + suffix));
         $(this).text(txt);
         $(this).off('click');
