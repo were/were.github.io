@@ -32,7 +32,7 @@
     <em>
       I will be actively looking for self-motivated and hard-working Ph.D. students interested in compiler infrastructures,
       RTL implementation, and architecture simulators. If you are interested, feel free to send me your CV and research interests
-      to <a href="#" id="hirephd">[first-name].[last-name].hirephd -at- gmail.com</a>, after reading
+      to <span id="hirephd" title="Click for my email address."><a href="#">[first-name].[last-name].hirephd -at- gmail.com</a></span>, after reading
       <a href="https://docs.google.com/document/d/1W8v8Vg1XAnclWWB6ifc6TLdcphsQMK7hxP-F7ZF7b7A/edit?usp=sharing"> my advertisement</a>.
     </em>
     </p>
@@ -325,26 +325,25 @@
       <span class="twitter"><img src="imag/twitter.png" width="16px" height="16px" style="vertical-align: middle;" /> <a href="https://twitter.com/jian_w3ng" rel="me">jian_w3ng</a></span>
     </div>
     <script>
+      function render_email_addr(id, midfix) {
+	var raw = $(id).text();
+	if (raw.includes(' -at- ')) {
+          var prefix = $.trim($('#my-name').text().toLowerCase().replace(' ', '.'));
+          var suffix = $.trim(raw.split(' -at- ')[1]);
+          var txt = $.trim((prefix + midfix + String.fromCharCode(64) + suffix));
+	  $(id + ' > a').text(txt);
+	} else {
+	  $(id + ' > a').attr("href", 'mailto:' + raw);
+	}
+      }
       $('#email').click(function() {
-        var prefix = $.trim($('#my-name').text().toLowerCase().replace(' ', '.'));
-        var suffix = $.trim($('#email').text().split(' -at- ')[1]);
-        var txt = $.trim((prefix + String.fromCharCode(64) + suffix));
-        $(this).text(txt);
-        $(this).off('click');
+	render_email_addr('#email', '')
       });
       $('#personal-email').click(function() {
-        var prefix = $.trim($('#my-name').text().toLowerCase().replace(' ', '.'));
-        var suffix = $.trim($('#personal-email').text().split(' -at- ')[1]);
-        var txt = $.trim((prefix + "465" + String.fromCharCode(64) + suffix));
-        $(this).text(txt);
-        $(this).off('click');
+	render_email_addr('#personal-email', '465')
       });
       $('#hirephd').click(function() {
-        var prefix = $.trim($('#my-name').text().toLowerCase().replace(' ', '.'));
-        var suffix = $.trim($('#hirephd').text().split(' -at- ')[1]);
-        var txt = $.trim((prefix + ".hirephd" + String.fromCharCode(64) + suffix));
-        $(this).text(txt);
-        $(this).off('click');
+	render_email_addr('#hirephd', '.hirephd')
       });
     </script>
   </body>
